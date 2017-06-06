@@ -34,15 +34,19 @@ namespace ky
     T = T.translate(this->position_.negated());
 
     Mat4 R = Mat4::identity();
-    R = R.translate(Vec2(400, 300)).rotateOnZ(-rotation_);
-
-    view_ = T * R;
+    R = R.rotateOnZ(-rotation_);
+    view_ = Mat4::identity().translate(
+        Vec2(Engine::instance().getDisplay().getWidth() / 2,
+          Engine::instance().getDisplay().getHeight() / 2)) * R * T;
+    transform_ = projection_ * view_;
   }
 
   void Camera::move(float x, float y)
   {
     this->previous_position_ = this->position_;
-    this->position_ += Vec2(x, y);
+    float c = cos(DEG_TO_RAD * this->rotation_);
+    float s = sin(DEG_TO_RAD * this->rotation_);
+    this->position_ += Vec2(x * c - y * s, x * s + y * c);
     this->update();
   }
 

@@ -3,6 +3,7 @@
 #include <iostream>
 
 #include <graphics/shader.hh>
+#include <cmath>
 
 namespace ky
 {
@@ -56,9 +57,9 @@ namespace ky
     const char* vertex_shader =
       "#version 400\n"
       "layout(location = 0) in vec3 vertex_position;"
-      "uniform mat4 view, proj, model;"
+      "uniform mat4 PV, model;"
       "void main() {"
-      "gl_Position = proj * view * model * vec4(vertex_position, 1.0);"
+      "gl_Position = PV * model * vec4(vertex_position, 1.0);"
       "}";
 
     const char* fragment_shader =
@@ -74,15 +75,12 @@ namespace ky
 
     Shader shader = Shader(vertex_shader, fragment_shader);
 
-    GLint view_mat_location = glGetUniformLocation(shader.getProgram(), "view");
-    GLint proj_mat_location = glGetUniformLocation(shader.getProgram(), "proj");
+    GLint pv_mat_location = glGetUniformLocation(shader.getProgram(), "PV");
     GLint model_mat_location = glGetUniformLocation(shader.getProgram(), "model");
 
     glUseProgram(shader.getProgram());
-    glUniformMatrix4fv(view_mat_location, 1, GL_FALSE,
-        camera_->getView().getValues().data());
-    glUniformMatrix4fv(proj_mat_location, 1, GL_FALSE,
-        camera_->getProjection().getValues().data());
+    glUniformMatrix4fv(pv_mat_location, 1, GL_FALSE,
+        camera_->getTransform().getValues().data());
     glUniformMatrix4fv(model_mat_location, 1, GL_FALSE,
         Mat4::identity().rotateOnZ(0).getValues().data());
     while (!display_->shouldClose())
@@ -105,10 +103,9 @@ namespace ky
         camera_->rotate(-20.0f);
       if (glfwGetKey(display_->getWindow(), GLFW_KEY_E))
         camera_->rotate(20.0f);
-    glUniformMatrix4fv( view_mat_location, 1, GL_FALSE,
-        camera_->getView().getValues().data());
-    glUniformMatrix4fv( proj_mat_location, 1, GL_FALSE,
-        camera_->getProjection().getValues().data());
+
+      glUniformMatrix4fv(pv_mat_location, 1, GL_FALSE,
+        camera_->getTransform().getValues().data());
       display_->postRender();
     }
 

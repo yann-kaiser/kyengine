@@ -24,15 +24,11 @@ namespace ky
   Mat4 Mat4::operator*(const Mat4 &rhs)
   {
     Mat4 r;
-    int r_index = 0;
     for (std::size_t col = 0; col < 4; col++) {
       for (std::size_t row = 0; row < 4; row++) {
-        float sum = 0.0f;
 
         for (std::size_t i = 0; i < 4; i++)
-          sum += rhs.values_[col * 4 + i] * values_[i * 4 + row];
-
-        r.values_[r_index++] = sum;
+          r(col, row) += rhs.values_[col * 4 + i] * values_[i * 4 + row];
       }
     }
   return r;

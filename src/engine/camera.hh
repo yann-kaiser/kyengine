@@ -18,10 +18,14 @@ namespace ky
 
       inline const Mat4& getProjection() { return projection_; };
       inline const Mat4& getView() { return view_; };
+      inline const Mat4& getTransform() { return transform_; };
+      inline float getRotation() { return rotation_; };
 
     private:
       Mat4 projection_;
       Mat4 view_;
+      Mat4 transform_;
+
       Vec2 position_;
       Vec2 previous_position_;
       float rotation_;
