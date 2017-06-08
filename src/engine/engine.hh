@@ -25,7 +25,7 @@ namespace ky
        * The game class is also created by user in the main.
        */
       void start(Game& game);
-      void close();
+      void stop();
 
       inline const Display& getDisplay() const { return *display_; }
       inline const Camera& getCamera() const { return *camera_; }

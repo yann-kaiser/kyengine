@@ -11,15 +11,29 @@ namespace ky
   {
     this->game_ = std::shared_ptr<Game>(&game);
 
-    this->display_ = std::make_unique<Display>("TEST", 800, 600);
+    // INIT DISPLAY
+    this->display_ = std::make_unique<Display>(game.getTitle(),
+        game.getWidth(), game.getHeight());
     this->display_->initialize();
 
+    // INIT MAIN CAMERA
+    int width = display_->getWidth();
+    int height = display_->getHeight();
+    camera_ = std::make_unique<Camera>(width, height, Vec2(0.0f, 0.0f));
+
+    this->game_->start();
+    this->game_->game_started();
+
+    // RUN THE GAMELOOP
     this->gameloop();
+
+    this->stop();
   }
 
-  void Engine::close()
+  void Engine::stop()
   {
-    std::cout << "ENGINE IS CLOSING" << std::endl;
+    this->game_->stop();
+    this->game_->game_stopped();
   }
 
 
@@ -69,9 +83,8 @@ namespace ky
       "  frag_colour = vec4(1, 1, 1, 1.0);"
       "}";
 
-    int width = display_->getWidth();
-    int height = display_->getHeight();
-    camera_ = std::make_unique<Camera>(0, width, 0, height, Vec2(0.0f, 0.0f));
+    double mx, my;
+
 
     Shader shader = Shader(vertex_shader, fragment_shader);
 
@@ -90,7 +103,11 @@ namespace ky
       glBindVertexArray(vao);
       glDrawArrays(GL_TRIANGLES, 0, 12);
 
-      glfwPollEvents();
+      glfwPollEvents(); // TODO: display_->preRender() ?
+      this->game_->gameloop();
+
+      glfwGetCursorPos(display_->getWindow(), &mx, &my);
+
       if (glfwGetKey(display_->getWindow(), GLFW_KEY_A))
         camera_->move(-20.0f, 0.0f);
       if (glfwGetKey(display_->getWindow(), GLFW_KEY_D))
