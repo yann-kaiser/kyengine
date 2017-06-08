@@ -4,7 +4,7 @@
 
 namespace ky
 {
-  Camera::Camera(float left, float right, float top, float bottom,
+  Camera::Camera(float width, float height,
       Vec2 position)
     : projection_(Mat4())
     , view_(Mat4())
@@ -12,15 +12,22 @@ namespace ky
     , previous_position_(position)
     , rotation_(0)
   {
+    resizeViewport(width, height);
+    update();
+  }
+
+  void Camera::resizeViewport(float width, float height)
+  {
+    //TODO: Do we want to set them manually while creating a game ?
     float near = 0.0f;
     float far  = 1000.0f;
 
-    projection_(0, 0) = 2.0f / (right - left);
-    projection_(1, 1) = 2.0f / (top - bottom);
+    projection_(0, 0) = 2.0f / (width);
+    projection_(1, 1) = 2.0f / (-height);
     projection_(2, 2) = -2.0f / (far - near);
 
-    projection_(3, 0) = -(right + left) / (right - left);
-    projection_(3, 1) = -(top + bottom) / (top - bottom);
+    projection_(3, 0) = -(width) / (width);
+    projection_(3, 1) = -(height) / (-height);
     projection_(3, 2) = -(far + near) / (far - near);
 
     projection_(3, 3) = 1;

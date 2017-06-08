@@ -9,8 +9,9 @@ namespace ky
   class Camera
   {
     public:
-      Camera(float left, float right, float top, float bottom,
-          Vec2 position);
+      Camera(float width, float height, Vec2 position);
+
+      void resizeViewport(float width, float height);
 
       void update();
       void move(float x, float y);
