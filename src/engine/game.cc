@@ -4,7 +4,10 @@
 
 namespace ky
 {
-  Game::Game()
+  Game::Game(std::string& title, int width, int height)
+    : title_(title)
+    , width_(width)
+    , height_(height)
   {}
 
   void Game::start()
