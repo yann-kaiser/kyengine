@@ -5,7 +5,7 @@
 
 namespace ky
 {
-  class Vec2
+  struct Vec2
   {
     public:
       Vec2();
