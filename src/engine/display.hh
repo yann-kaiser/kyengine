@@ -15,6 +15,9 @@ namespace ky
       void postRender(); // Usually swap buffers
       void terminate();
 
+      inline void setSize(int width, int height)
+        { this->width_ = width; this->height_ = height; }
+
       inline const std::string& getTitle() const { return title_; }
       inline int getWidth() const { return width_; }
       inline int getHeight() const { return height_; }
