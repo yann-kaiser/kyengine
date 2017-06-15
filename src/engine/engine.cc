@@ -7,6 +7,8 @@
 
 namespace ky
 {
+  void kyEngineResizeCallback(GLFWwindow*, int, int); // Forward declaration
+
   void Engine::start(Game& game)
   {
     this->game_ = std::shared_ptr<Game>(&game);
@@ -15,6 +17,8 @@ namespace ky
     this->display_ = std::make_unique<Display>(game.getTitle(),
         game.getWidth(), game.getHeight());
     this->display_->initialize();
+
+    glfwSetWindowSizeCallback(display_->getWindow(), kyEngineResizeCallback);
 
     // INIT MAIN CAMERA
     int width = display_->getWidth();
@@ -129,4 +133,15 @@ namespace ky
     display_->terminate();
   }
 
+  void kyEngineResizeCallback(GLFWwindow* window, int width, int height)
+  {
+    (void) window;
+    Engine::instance().windowResized(width, height);
+  }
+
+  void Engine::windowResized(int width, int height)
+  {
+    this->display_->setSize(width, height);
+    this->camera_->resizeViewport(width, height);
+  }
 }

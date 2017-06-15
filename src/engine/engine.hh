@@ -8,6 +8,8 @@
 
 #include <engine/camera.hh>
 
+#include <GLFW/glfw3.h>
+
 namespace ky
 {
   class Engine
@@ -26,6 +28,8 @@ namespace ky
        */
       void start(Game& game);
       void stop();
+
+      void windowResized(int width, int height);
 
       inline const Display& getDisplay() const { return *display_; }
       inline const Camera& getCamera() const { return *camera_; }
