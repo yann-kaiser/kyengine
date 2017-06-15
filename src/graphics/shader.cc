@@ -10,9 +10,6 @@ namespace ky
   {
     const char* vert = vert_content.c_str();
     const char* frag = frag_content.c_str();
-  
-    std::cout << vert << std::endl;
-    std::cout << frag << std::endl;
 
     vertex_shader_ = glCreateShader(GL_VERTEX_SHADER);
     glShaderSource(vertex_shader_, 1, &vert, NULL);
